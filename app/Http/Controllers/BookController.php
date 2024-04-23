@@ -6,6 +6,7 @@ use App\Http\Requests\BookStoreRequest;
 use App\Http\Requests\BookUpdateRequest;
 use Illuminate\Http\Request;
 use App\Models\Books;
+use App\Models\Comments;
 use Illuminate\Support\Facades\Auth;
 
 class BookController extends Controller
@@ -45,6 +46,13 @@ class BookController extends Controller
     {
         $book->delete();
 
+        return redirect()->route('welcome');
+    }
+    public function comments($book_id) {
+        return view('user.comments.bookComments', compact('book_id'));
+    }
+    public function createComments(Request $request) {
+        Comments::create($request->all());
         return redirect()->route('welcome');
     }
 }
