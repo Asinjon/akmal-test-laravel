@@ -26,21 +26,20 @@
             $library = App\Models\Books::where('user_id', '=', $user_id)->select('id', 'name', 'user_id', 'number_of_pages', 'created_at')->get();
             $user = App\Models\User::find($user_id);
             $user_name = $user->name;
-            foreach($library as $book){
-                echo "ID:" . $book->id . "<br>";
-                echo "Имя:" . $book->name . "<br>";
-                echo "Автор:" . $user_name . "<br>";
-                echo "Кол-во страниц:" . $book->number_of_pages . "<br>";
-                echo "Дата публикации:" . $book->created_at . "<br>";
-                 ?>
+            ?>
+            @foreach($library as $book)
+                {{ "ID:" . $book->id }} <br>
+                {{ "Имя:" . $book->name }} <br>
+                {{ "Автор:" . $user_name }} <br>
+                {{ "Кол-во страниц:" . $book->number_of_pages }} <br>
+                {{ "Дата публикации:" . $book->created_at }} <br>
                 <a href="/bookComments/{{ $book->id }}">
                     <img src="{{ asset('storage/images/2024-04-03/2182946.png')}}" alt="Комментарии" height="40">
                  </a><=Комментарии<br>
                 <a href="/updateBook/{{ $book->id }}">Редактировать</a>
                 <br>
                 <br>
-        <?php }
-        ?>
+            @endforeach
         <br>
         <form action="/booksMake" method="post">
             @csrf

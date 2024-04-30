@@ -22,24 +22,23 @@
     </style>
 </head>
 <body>
-<?php
+    <?php
             $library = App\Models\Posts::where('user_id', '=', $user_id)->select('id', 'name', 'user_id', 'description', 'created_at')->get();
             $user = App\Models\User::find($user_id);
             $user_name = $user->name;
-            foreach($library as $post){
-                echo "ID:" . $post->id . "<br>";
-                echo "Имя:" . $post->name . "<br>";
-                echo "Автор:" . $user_name . "<br>";
-                echo "Описание:" . $post->description . "<br>";
-                echo "Дата публикации:" . $post->created_at . "<br>";     
-       ?> 
+            ?>
+            @foreach($library as $post)
+                {{ "ID:" . $post->id}}<br>
+                {{ "Имя:" . $post->name}}<br>
+                {{ "Автор:" . $user_name}}<br>
+                {{ "Описание:" . $post->description}}<br>
+                {{ "Дата публикации:" . $post->created_at}}<br>
             <a href="/postComments/{{ $post->id }}">
                     <img src="{{ asset('storage/images/2024-04-03/2182946.png')}}" alt="Комментарии" height="40">
-                 </a><=Комментарии<br>
+            </a><=Комментарии<br>
             <a href="/updatePost/{{ $post->id }}">Редактировать</a>
-            <br><br>
-       <?php } 
-        ?>
+            <br><br> 
+            @endforeach
         <br>
         <form action="/postsMake" method="post">
             @csrf
