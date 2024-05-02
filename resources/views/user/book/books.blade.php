@@ -23,11 +23,13 @@
 </head>
 <body>
         <?php
-            $library = App\Models\Books::where('user_id', '=', $user_id)->select('id', 'name', 'user_id', 'number_of_pages', 'created_at')->get();
-            $user = App\Models\User::find($user_id);
-            $user_name = $user->name;
+            $library = App\Models\Books::all();
             ?>
             @foreach($library as $book)
+            <?php
+                $user = App\Models\User::find($book->user_id);
+                $user_name = $user->name;
+            ?>
                 {{ "ID:" . $book->id }} <br>
                 {{ "Имя:" . $book->name }} <br>
                 {{ "Автор:" . $user_name }} <br>
@@ -35,19 +37,27 @@
                 {{ "Дата публикации:" . $book->created_at }} <br>
                 <a href="/bookComments/{{ $book->id }}">
                     <img src="{{ asset('storage/images/2024-04-03/2182946.png')}}" alt="Комментарии" height="40">
-                 </a><=Комментарии<br>
+                </a><=Комментарии<br>
+                 <?php
+                $auth_user_id = Illuminate\Support\Facades\Auth::id();
+                $book_user_id = $book->user_id;
+                if($auth_user_id == $book_user_id) { ?>
+                
                 <a href="/updateBook/{{ $book->id }}">Редактировать</a>
+             <?php } ?>
                 <br>
                 <br>
             @endforeach
         <br>
+        @if(auth()->check())
         <form action="/booksMake" method="post">
             @csrf
             <input type="text" name="name">Имя<br>
             <input type="number" name="number_of_pages">Кол-во страниц<br>
-            <input type="hidden" name="user_id" value="{{$user_id}}">
+            <input type="hidden" name="user_id" value="{{ Illuminate\Support\Facades\Auth::id() }}">
             <input type="submit" value="Создать книгу">
         </form>
+        @endif
     <br>
     <a href="{{ route('welcome') }}">Главная</a>
 </body>

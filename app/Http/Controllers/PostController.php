@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
-    public function read($user_id) {
-        return view('user.posts.posts', compact('user_id'));
+    public function read() {
+        return view('user.posts.posts');
     }
     public function create(Request $request) {
         Posts::create($request->all());

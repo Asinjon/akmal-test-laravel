@@ -23,30 +23,39 @@
 </head>
 <body>
     <?php
-            $library = App\Models\Posts::where('user_id', '=', $user_id)->select('id', 'name', 'user_id', 'description', 'created_at')->get();
-            $user = App\Models\User::find($user_id);
-            $user_name = $user->name;
+            $library = App\Models\Posts::all();
             ?>
             @foreach($library as $post)
+            <?php
+                $user = App\Models\User::find($post->user_id);
+                $user_name = $user->name;
+            ?>
                 {{ "ID:" . $post->id}}<br>
                 {{ "Имя:" . $post->name}}<br>
                 {{ "Автор:" . $user_name}}<br>
                 {{ "Описание:" . $post->description}}<br>
                 {{ "Дата публикации:" . $post->created_at}}<br>
-            <a href="/postComments/{{ $post->id }}">
+                <a href="/postComments/{{ $post->id }}">
                     <img src="{{ asset('storage/images/2024-04-03/2182946.png')}}" alt="Комментарии" height="40">
-            </a><=Комментарии<br>
+                </a><=Комментарии<br>
+                <?php
+                $auth_user_id = Illuminate\Support\Facades\Auth::id();
+                $post_user_id = $post->user_id;
+                if($auth_user_id == $post_user_id) { ?>
             <a href="/updatePost/{{ $post->id }}">Редактировать</a>
+            <?php } ?>
             <br><br> 
             @endforeach
         <br>
+        @if(auth()->check())
         <form action="/postsMake" method="post">
             @csrf
             <input type="text" name="name">Имя<br>
             <textarea name="description" placeholder="Введите описание" id="www"></textarea>
-            <input type="hidden" name="user_id" value="{{$user_id}}">
-            <input type="submit" value="Создать книгу">
+            <input type="hidden" name="user_id" value="{{ Illuminate\Support\Facades\Auth::id() }}">
+            <input type="submit" value="Создать пост">
         </form>
+        @endif
         <br>
         <a href="{{ route('welcome') }}">Главная</a>
 </body>

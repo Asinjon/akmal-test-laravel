@@ -148,30 +148,34 @@
 </head>
 <body>
 <?php
-            $comments = App\Models\Comments::where('post_id', '=', $post_id)->select('id', 'post_id', 'user_id', 'text', 'created_at')->get();
-            ?>
-            @foreach($comments as $comment)
-                <?php 
-                $user = App\Models\User::find($comment->user_id); 
-                $user_name = $user->name;
-                ?>
-                <br><br><br><br>
-                <div class="tooltip-container">
-                    <span class="tooltip">{{ $comment->created_at }}</span>
-                    <span class="text">{{ $user_name }}</span>
-                    <span>{{ $comment->text }}</span>
-                </div>
-                <br>
-            @endforeach
-                <br>
-                <br>
+    $comments = App\Models\Comments::where('post_id', '=', $post_id)->select('id', 'post_id', 'user_id', 'text', 'created_at')->get();
+    ?>
+    @foreach($comments as $comment)
+        <?php
+        $user = App\Models\User::find($comment->user_id); 
+        $user_name = $user->name;
+        ?>
+        <br><br><br><br>
+        <div class="tooltip-container">
+            <span class="tooltip">{{ $comment->created_at }}</span>
+            <span class="text">{{ $user_name }}</span>
+            <span>{{ $comment->text }}</span>
+        </div>
         <br>
-        <form action="/make_postComments" method="post">
-            @csrf
-            <input type="hidden" name="post_id" value="{{ $post_id }}">
-            <input type="hidden" name="user_id" value="{{ Illuminate\Support\Facades\Auth::id(); }}">
-            <textarea name="text" placeholder="Введите комментарий" id="www"></textarea>
-            <input type="submit" value="Send">
-        </form>
+    @endforeach
+        <br>
+        <br>
+    <br>
+    @if(auth()->check())
+    <form action="/make_postComments" method="post">
+        @csrf
+        <input type="hidden" name="post_id" value="{{ $post_id }}">
+        <input type="hidden" name="user_id" value="{{ Illuminate\Support\Facades\Auth::id(); }}">
+        <textarea name="text" placeholder="Введите комментарий" id="www"></textarea>
+        <input type="submit" value="Send">
+    </form>
+    @else
+    <h1>Чтобы добавлять комментарии создайте аккаунт</h1>
+    @endif
 </body>
 </html>

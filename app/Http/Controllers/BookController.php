@@ -48,11 +48,4 @@ class BookController extends Controller
 
         return redirect()->route('welcome');
     }
-    public function comments($book_id) {
-        return view('user.comments.bookComments', compact('book_id'));
-    }
-    public function createComments(Request $request) {
-        Comments::create($request->all());
-        return redirect()->route('welcome');
-    }
 }
