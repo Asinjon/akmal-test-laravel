@@ -81,27 +81,56 @@
         background: #F5D7BF;
         padding: 10px;
       }
+      a {
+        text-decoration: none;
+      }
+      .menu__link {
+        color: #fff;
+        line-height: 2;
+        position: relative;
+        padding-right: 4px;
+      }
+
+      .menu__link:hover {
+        text-decoration: underline;
+      }
+
+      .menu__link::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-top: solid 2px #fff;
+        border-right: solid 2px #fff;
+        border-radius: 2px;
+        position: absolute;
+        top: 50%;
+        left: 100%;
+        transform: translateY(-50%) rotate(45deg);
+        transition: transform .4s;
+      }
+
+      .menu__link:hover::before {
+        transform: translateX(4px) translateY(-50%) rotate(45deg);
+      }
     </style>
 </head>
 <body>
 <h1 style="color:LightGray;">Добро пожаловать</h1>
 @if(auth()->check())
     <h1 style="color:LightGray;">Вы авторизованы</h1>
-        <?php $user = Illuminate\Support\Facades\Auth::id(); ?>
-    <h2><a href="books/{{ $user }}">Список книг</a></h2>
-    <h2><a href="#">Список постов</a></h2>
-    <br>
-    <br>
 @else
-    <h1>Вы гость</h1>
+    <h1 style="color:LightGray;">Вы гость</h1>
 @endif
-<br>
+<h2><a class="menu__link" href="/books">Список книг</a></h2>
+<h2><a class="menu__link" href="/posts">Список постов</a></h2>
 <br>
 <br>
 @if(auth()->check())
-    <a href="#">{{ auth()->user()->name }}
+        <a href="#">{{ auth()->user()->name }}
         @if (auth()->user()->avatar)
             <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="" height="40">
+            @else
+                <img src="{{ asset('files/149071.png') }}" alt="" height="40">
         @endif
     </a><br>
     <a href="{{  route('logout')  }}">Выход</a><br>

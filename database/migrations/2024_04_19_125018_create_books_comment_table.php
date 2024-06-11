@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('books_comment', function (Blueprint $table) {
+        Schema::create('comment', function (Blueprint $table) {
             $table->id();
-            $table->integer('book_id');
+            $table->integer('book_id')->nullable();
             $table->integer('user_id');
             $table->text('text');
             $table->timestamps();
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('books_comment');
+        Schema::dropIfExists('comment');
     }
 };

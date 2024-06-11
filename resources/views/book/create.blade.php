@@ -9,7 +9,7 @@
 </head>
 <body>
 <p>Создайте книгу</p>
-<form action="/booksMake" method="post">
+<form action="/books/" method="post">
     @csrf
     <input type="text" name="name">Имя<br>
     <input type="number" name="pages">Кол-во страниц<br>

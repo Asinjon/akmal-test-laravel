@@ -22,27 +22,31 @@
     </style>
 </head>
 <body>
-@php
-    $user_id = \Illuminate\Support\Facades\Auth::id();
-    $library = App\Models\Books::where('user_id', '=', $user_id)->select('id', 'name', 'user_id', 'pages')->get();
-    $user = App\Models\User::find($user_id);
-    $user_name = $user->name;
-@endphp
-@foreach($library as $book)
+@foreach($books as $book)
+    <br>
     ID: {{$book->id}} <br>
     Имя: {{ $book->name }} <br>
-    Автора: {{ $user_name }} <br>
+    Автор: {{ $book->user->name }} <br>
     Кол-во страниц: {{ $book->pages }} <br>
-    <a href="/update/{{ $book->id }}">Редактировать</a>
-    <br><br>
+    @if(\Illuminate\Support\Facades\Auth::id() == $book->user_id)
+        <a href="/books/{{ $book->id }}/edit">Редактировать</a><br>
+        <form action="books/{{ $book->id }}" method="post">
+            @csrf
+            @method('DELETE')
+            <input type="submit" value="Удалить">
+        </form>
+    @endif
+    <a href="/book_comment/{{ $book->id }}">
+        <img src="{{ asset('files/2182946.png') }}" alt="Комментарии" height="30">
+    </a><br>
 @endforeach
-
-
 <br>
-<a href="/booksMake">Создать книгу</a>
-<br>
-<br>
-<br>
+@if(auth()->check())
+    <a href="/books/create">Создать книгу</a>
+    <br>
+    <br>
+    <br>
+@endif
 <a href="{{ route('welcome') }}">Главная</a>
 </body>
 </html>

@@ -1,9 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Reset password</title>
     <style>
       body {
         background-color: black;
@@ -89,31 +91,36 @@
 </head>
 <body>
 <div class="form-container">
-    <form class="form" action="{{ route('login') }}" method="post">
-        <span class="heading">Login Form</span>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li style="color: #ea0b0b; font-size: larger;">{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+    <form class="form" action="{{ route('password.update') }}" method="post">
+        <span class="heading">New password</span>
         @csrf
         <div class="form-group">
-            <input class="form-input" required="" type="email" name="email"/>
+            <input class="form-input" required="" type="email" name="email" value="{{ old('email', $request->email)
+            }}"/>
             <label>Email</label>
         </div>
         <div class="form-group">
             <input class="form-input" required="" type="password" name="password"/>
-            <label>Password</label>
+            <label>New Password</label>
         </div>
 
+        <div class="form-group">
+            <input class="form-input" required="" type="password" name="password_confirmation"/>
+            <label>New Password Confirmation</label>
+        </div>
+        <input type="hidden" name="token" value="{{ $request->token }}">
         <button>Send</button>
     </form>
 </div>
 <p>{{ session('status') }}</p>
-@if(session('login_error'))
-    <p style="color: #969696">{{ session('login_error') }}</p>
-    @php
-        session()->forget('login_error');
-    @endphp
-@endif
-<a href="{{  route('register')  }}">Регистрация</a><br>
-<a href="{{ route('welcome') }}">Главная</a><br>
-<a href="{{ route('password.request') }}">Забыли пароль?</a>
-
 </body>
 </html>

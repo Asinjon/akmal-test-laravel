@@ -48,13 +48,22 @@
 </head>
 
 <body>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li style="color: #ea0b0b; font-size: larger;">{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <form action="{{ route('register.store') }}" method="post" enctype="multipart/form-data">
     @csrf
     <input type="text" autocomplete="off" name="name" class="input" placeholder="Username"><br>
     <input type="text" autocomplete="off" name="email" class="input" placeholder="Email"><br>
     <input type="password" autocomplete="off" name="password" class="input" placeholder="Password"><br>
     <input type="password" autocomplete="off" name="password_confirmation" class="input" placeholder="Confirm Password"><br>
-    <input type="file" name="avatar">Аватар<br>
+    <input type="file" name="avatar" style="color: #969696">Аватар<br>
     <button>
         Send
     </button>
