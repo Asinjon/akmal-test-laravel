@@ -87,21 +87,19 @@
 <h1 style="color:LightGray;">Добро пожаловать</h1>
 @if(auth()->check())
     <h1 style="color:LightGray;">Вы авторизованы</h1>
-        <?php $user = Illuminate\Support\Facades\Auth::id(); ?>
-    <h2><a href="books/{{ $user }}">Список книг</a></h2>
-    <h2><a href="#">Список постов</a></h2>
-    <br>
-    <br>
 @else
-    <h1>Вы гость</h1>
+    <h1 style="color:LightGray;">Вы гость</h1>
 @endif
-<br>
+<h2><a href="/books">Список книг</a></h2>
+<h2><a href="/posts">Список постов</a></h2>
 <br>
 <br>
 @if(auth()->check())
-    <a href="#">{{ auth()->user()->name }}
+        <a href="#">{{ auth()->user()->name }}
         @if (auth()->user()->avatar)
             <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="" height="40">
+            @else
+                <img src="{{ asset('files/149071.png') }}" alt="" height="40">
         @endif
     </a><br>
     <a href="{{  route('logout')  }}">Выход</a><br>

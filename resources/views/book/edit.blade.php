@@ -35,14 +35,13 @@
 </head>
 <body>
 
-<form action="/update/{{ $book->id }}" method="post">
+<form action="/books/{{ $book->id }}" method="post">
     @csrf
+    @method('PUT')
     <input type="text" name="name" value="{{ $book->name }}">Имя<br>
     <input type="number" name="pages" value="{{ $book->pages }}">Кол-во страниц<br>
     <input type="submit" value="Обновить">
 </form>
-<a href="/delete_book/{{ $book->id }}">
-    <img src="{{ asset('storage/images/2024-04-03/64022.png') }}" alt="" height="20">
-</a> <=Удалить
+
 </body>
 </html>

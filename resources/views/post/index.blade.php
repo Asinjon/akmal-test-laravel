@@ -22,31 +22,32 @@
     </style>
 </head>
 <body>
-@foreach($books as $book)
+@foreach($posts as $post)
     <br>
-    ID: {{$book->id}} <br>
-    Имя: {{ $book->name }} <br>
-    Автор: {{ $book->user->name }} <br>
-    Кол-во страниц: {{ $book->pages }} <br>
-    @if(\Illuminate\Support\Facades\Auth::id() == $book->user_id)
-        <a href="/books/{{ $book->id }}/edit">Редактировать</a><br>
-        <form action="books/{{ $book->id }}" method="post">
+    ID: {{$post->id}} <br>
+    Имя: {{ $post->name }} <br>
+    Автор: {{ $post->user->name }} <br>
+    Описание: {{ $post->description }} <br>
+    @if(\Illuminate\Support\Facades\Auth::id() == $post->user_id)
+        <a href="/posts/{{ $post->id }}/edit">Редактировать</a>
+        <br>
+        <form action="posts/{{ $post->id }}" method="post">
             @csrf
             @method('DELETE')
             <input type="submit" value="Удалить">
         </form>
     @endif
-    <a href="/book_comment/{{ $book->id }}">
-        <img src="{{ asset('files/2182946.png') }}" alt="Комментарии" height="30">
-    </a><br>
+        <a href="/post_comment/{{ $post->id }}">
+            <img src="{{ asset('files/2182946.png') }}" alt="Комментарии" height="30">
+        </a><br>
 @endforeach
 <br>
 @if(auth()->check())
-    <a href="/books/create">Создать книгу</a>
-    <br>
-    <br>
+    <a href="/posts/create">Создать пост</a>
     <br>
 @endif
+    <br>
+    <br>
 <a href="{{ route('welcome') }}">Главная</a>
 </body>
 </html>

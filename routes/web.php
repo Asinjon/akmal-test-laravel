@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\PostController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,15 +27,35 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [LoginController::class, 'login'])->name('login');
 });
 
-Route::middleware('auth')->group(function () {
+Route::get('/books', [BookController::class, 'index'])->name('books');
+Route::get('/posts', [PostController::class, 'index']);
+
+Route::middleware(['auth', 'verified'])->group(function () {
+
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
-    Route::get('/books/{user_id}', [BookController::class, 'show'])->name('books');
-    Route::get('/booksMake', [BookController::class, 'create']);
-    Route::post('/booksMake', [BookController::class, 'store']);
-    Route::get('update/{book}', [BookController::class, 'edit']);
-    Route::post('update/{book}', [BookController::class, 'update']);
-    Route::get('/delete_book/{book}', [BookController::class, 'destroy']);
+
+    Route::prefix('books')->group(function () {
+        Route::get('/create', [BookController::class, 'create']);
+        Route::post('/', [BookController::class, 'store']);
+        Route::get('/{book}/edit', [BookController::class, 'edit']);
+        Route::put('/{book}', [BookController::class, 'update']);
+        Route::delete('/{book}', [BookController::class, 'destroy']);
+        Route::post('/create_comment', [CommentController::class, 'stroreComments']);
+    });
+
+    //---------------------------------------------------------------------------------
+    Route::prefix('posts')->group(function () {
+        Route::get('/create', [PostController::class, 'create']);
+        Route::post('/', [PostController::class, 'store']);
+        Route::get('/{post}/edit', [PostController::class, 'edit']);
+        Route::put('/{post}', [PostController::class , 'update']);
+        Route::delete('/{post}', [PostController::class, 'destroy']);
+        Route::post('/create_comment', [CommentController::class, 'storeComments']);
+    });
+
 });
+Route::get('/post_comment/{post}', [CommentController::class, 'bookcomments']);
+Route::get('/book_comment/{book}', [CommentController::class, 'postcomments']);
 
 Route::get('/home', function () {
     return view('welcome');
@@ -48,7 +70,7 @@ Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
-Route::post('/email/verification-notification', function (Request $request) {
+Route::get('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
 
     return back()->with('message', 'Verification link sent!');

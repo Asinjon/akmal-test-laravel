@@ -2,42 +2,50 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Posts;
-use App\Models\Books;
-use App\Models\Comments;
+use App\Http\Requests\Post\UpdateRequest;
+use App\Http\Requests\Post\StoreRequest;
+use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
-    public function read() {
-        return view('user.posts.posts');
+    public function index()
+    {
+        $posts  = Post::with('user')->get();
+
+        return view('post.index', compact( 'posts'));
     }
-    public function create(Request $request) {
-        Posts::create($request->all());
+
+    public function create()
+    {
+        return view('post.create');
+    }
+
+    public function store(StoreRequest $request)
+    {
+        Post::create($request->validated());
+
         return redirect()->route('welcome');
     }
-    public function updateForm($post_id) {
-        return view('user.posts.updatePost', compact('post_id'));
+
+    public function edit(Post $post)
+    {
+        return view('post.edit', compact('post'));
     }
-    public function updateCreate(Request $request) {
-        $post = Posts::find($request->id);
-        $user_id = Auth::id();
+
+    public function update(Post $post, UpdateRequest $request)
+    {
         $post->name = $request->name;
         $post->description = $request->description;
         $post->save();
-        return view('user.posts.posts', compact('user_id'));
-    }
-    public function delete($post_id) {
-        $post = Posts::find($post_id);
-        $post->delete();
+
         return redirect()->route('welcome');
     }
-    public function comments($post_id) {
-        return view('user.comments.postComments', compact('post_id'));
-    }
-    public function createComments(Request $request) {
-        Comments::create($request->all());
+
+    public function destroy(Post $post)
+    {
+        $post->delete();
+
         return redirect()->route('welcome');
     }
 }
