@@ -22,26 +22,27 @@
     </style>
 </head>
 <body>
-@foreach($books as $book)
+@foreach($posts as $post)
     <br>
-    ID: {{$book->id}} <br>
-    Имя: {{ $book->name }} <br>
-    Автор: {{ $book->user->name }} <br>
-    Кол-во страниц: {{ $book->pages }} <br>
-    @if($thisUserId == $book->user_id)
-        <a href="/book/update/{{ $book->id }}">Редактировать</a><br>
+    ID: {{$post->id}} <br>
+    Имя: {{ $post->name }} <br>
+    Автор: {{ $post->user->name }} <br>
+    Описание: {{ $post->description }} <br>
+    @if($thisUserId == $post->user_id)
+        <a href="/post/update/{{ $post->id }}">Редактировать</a>
+        <br>
     @endif
-    <a href="/book_comment/{{ $book->id }}">
-        <img src="{{ asset('files/2182946.png') }}" alt="Комментарии" height="30">
-    </a><br>
+        <a href="/post_comment/{{ $post->id }}">
+            <img src="{{ asset('files/2182946.png') }}" alt="Комментарии" height="30">
+        </a><br>
 @endforeach
 <br>
 @if(auth()->check())
-    <a href="/book/store">Создать книгу</a>
-    <br>
-    <br>
+    <a href="/post/store">Создать пост</a>
     <br>
 @endif
+    <br>
+    <br>
 <a href="{{ route('welcome') }}">Главная</a>
 </body>
 </html>
