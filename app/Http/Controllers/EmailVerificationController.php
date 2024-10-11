@@ -12,12 +12,13 @@ class EmailVerificationController extends Controller
     public function check(Request $request)
     {
         $real_token = EmailVerificationPassword::where('user_id', auth()->id())->first();
-        if($real_token->token == $request->token) {
-            $user = User::find(Auth::id());
+        if ($real_token->token == $request->token) {
+            $user                    = User::find(Auth::id());
             $user->email_verified_at = date('Y-m-d H:i:s');
             $user->save();
             $real_token->delete();
-            return "Your email verified";
+
+            return redirect()->route('welcome');
         } else {
             return redirect()->back();
         }
